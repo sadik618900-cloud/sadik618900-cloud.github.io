@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="bn" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>হাদিস পড়ুন - সহজ ও পরিষ্কার ইন্টারফেস</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Scheherazade+New:wght@400;700&amp;family=Hind+Siliguri:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #6ba2ff;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #eaeaea;
+            --accent-color: #f8f9fa;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --error-color: #dc3545;
+            --font-size-base: 16px;
+            --line-height-base: 1.6;
+            --font-family-bn: 'Hind Siliguri', sans-serif;
+            --font-family-ar: 'Amiri', 'Scheherazade New', serif;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary-color: #6ba2ff;
+            --secondary-color: #8bb5ff;
+            --bg-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --border-color: #444444;
+            --accent-color: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-bn);
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-base);
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: var(--transition);
+            direction: ltr;
+        }
+
+        body.rtl {
+            direction: rtl;
+        }
+
+        /* হেডার স্টাইল */
+        header {
+            padding: 1rem 2rem;
+            background-color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* মেইন কন্টেন্ট */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* পোস্ট হেডার */
+        .post-header {
+            margin-bottom: 2rem;
+            text-align: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .post-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            line-height: 1.4;
+        }
+
+        .post-meta {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* হাদিস কন্টেন্ট */
+        .hadith-content {
+            margin-bottom: 2rem;
+        }
+
+        .arabic-text {
+            font-family: var(--font-family-ar);
+            font-size: 1.8rem;
+            text-align: right;
+            line-height: 2.2;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background-color: var(--accent-color);
+            border-radius: var(--border-radius);
+            border-right: 4px solid var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .rtl .arabic-text {
+            border-right: none;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .translation {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-left: 3px solid var(--secondary-color);
+            background-color: rgba(107, 162, 255, 0.05);
+        }
+
+        .rtl .translation {
+            border-left: none;
+            border-right: 3px solid var(--secondary-color);
+        }
+
+        /* রেফারেন্স */
+        .reference {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* কন্ট্রোল বাটন */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--accent-color);
+            border-radius: var(--border-radius);
+        }
+
+        .control-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        button, .btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--accent-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color);
+        }
+
+        button:hover, .btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        button.active, .btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        /* অডিও প্লেয়ার */
+        .audio-player {
+            margin: 2rem 0;
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--accent-color);
+            border-radius: var(--border-radius);
+        }
+
+        .audio-title {
+            margin-bottom: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 500px;
+            height: 40px;
+            border-radius: 20px;
+        }
+
+        /* ডাউনলোড সেকশন */
+        .download-section {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .download-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* কমেন্ট সেকশন */
+        .comments-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .comments-title {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comment-form {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: var(--accent-color);
+            border-radius: var(--border-radius);
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(44, 90, 160, 0.2);
+        }
+
+        .comment {
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            background-color: var(--accent-color);
+            transition: var(--transition);
+        }
+
+        .comment:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comment-date {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .comment-text {
+            line-height: 1.6;
+        }
+
+        /* সার্চ সেকশন */
+        .search-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--accent-color);
+            border-radius: var(--border-radius);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(44, 90, 160, 0.2);
+        }
+
+        /* নেভিগেশন */
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+        }
+
+        /* ফুটার */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        /* রিডার মোড */
+        body.reader-mode {
+            padding: 0;
+        }
+
+        body.reader-mode header,
+        body.reader-mode .controls,
+        body.reader-mode .audio-player,
+        body.reader-mode .download-section,
+        body.reader-mode .comments-section,
+        body.reader-mode .search-section,
+        body.reader-mode .navigation,
+        body.reader-mode footer {
+            display: none;
+        }
+
+        body.reader-mode .container {
+            max-width: 100%;
+            padding: 2rem;
+        }
+
+        body.reader-mode .arabic-text {
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            padding: 3rem;
+        }
+
+        body.reader-mode .translation {
+            font-size: 1.4rem;
+            line-height: 2;
+            padding: 2rem;
+        }
+
+        /* ইউটিলিটি ক্লাসেস */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+
+        /* রেসপনসিভ ডিজাইন */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header-controls {
+                justify-content: center;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .control-group {
+                justify-content: center;
+            }
+            
+            .arabic-text {
+                font-size: 1.5rem;
+                padding: 1.5rem;
+            }
+            
+            .post-title {
+                font-size: 1.5rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                justify-content: center;
+            }
+            
+            body.reader-mode .arabic-text {
+                font-size: 1.8rem;
+                padding: 2rem;
+            }
+            
+            body.reader-mode .translation {
+                font-size: 1.2rem;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .arabic-text {
+                font-size: 1.3rem;
+                padding: 1rem;
+            }
+            
+            .post-title {
+                font-size: 1.3rem;
+            }
+            
+            .comment-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* অ্যানিমেশন */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* স্ক্রলবার স্টাইলিং */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--accent-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-book-quran"></i>
+            <span>হাদিস পড়ুন</span>
+        </div>
+        <div class="header-controls">
+            <button id="readerModeBtn" title="রিডার মোড">
+                <i class="fas fa-book-reader"></i>
+                <span>রিডার মোড</span>
+            </button>
+            <button id="darkModeBtn" title="ডার্ক মোড">
+                <i class="fas fa-moon"></i>
+                <span>ডার্ক মোড</span>
+            </button>
+            <select id="languageSelect" title="ভাষা নির্বাচন করুন">
+                <option value="bn">বাংলা</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+            </select>
+            <button id="fontSettingsBtn" title="ফন্ট সেটিংস">
+                <i class="fas fa-font"></i>
+                <span>ফন্ট</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- সার্চ সেকশন -->
+        <section class="search-section fade-in">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="হাদিস খুঁজুন...">
+                <button id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    <span class="sr-only">খুঁজুন</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- পোস্ট হেডার -->
+        <section class="post-header fade-in">
+            <h1 class="post-title">হাদিস: সততা ও আমানতদারিতা</h1>
+            <div class="post-meta">
+                <span><i class="fas fa-book"></i> সহীহ বুখারী</span>
+                <span><i class="fas fa-hashtag"></i> হাদিস নং: ১২০</span>
+                <span><i class="fas fa-clock"></i> পড়ার সময়: ২ মিনিট</span>
+            </div>
+        </section>
+        
+        <!-- কন্ট্রোল প্যানেল -->
+        <section class="controls fade-in">
+            <div class="control-group">
+                <button id="fontSizeDecrease" title="ছোট ফন্ট">
+                    <i class="fas fa-font"></i>
+                    <span>ছোট</span>
+                </button>
+                <button id="fontSizeReset" title="ডিফল্ট ফন্ট" class="active">
+                    <i class="fas fa-font"></i>
+                    <span>ডিফল্ট</span>
+                </button>
+                <button id="fontSizeIncrease" title="বড় ফন্ট">
+                    <i class="fas fa-font"></i>
+                    <span>বড়</span>
+                </button>
+            </div>
+            <div class="control-group">
+                <button id="lineSpacingTight" title="ঘন লাইন">
+                    <i class="fas fa-text-height"></i>
+                    <span>ঘন</span>
+                </button>
+                <button id="lineSpacingNormal" title="সাধারণ লাইন" class="active">
+                    <i class="fas fa-text-height"></i>
+                    <span>সাধারণ</span>
+                </button>
+                <button id="lineSpacingWide" title="ফাঁকা লাইন">
+                    <i class="fas fa-text-height"></i>
+                    <span>ফাঁকা</span>
+                </button>
+            </div>
+        </section>
+        
+        <!-- হাদিস কন্টেন্ট -->
+        <article class="hadith-content fade-in">
+            <div class="arabic-text">
+                عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ، عَنِ النَّبِيِّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ قَالَ: آيَةُ الْمُنَافِقِ ثَلَاثٌ: إِذَا حَدَّثَ كَذَبَ، وَإِذَا وَعَدَ أَخْلَفَ، وَإِذَا اؤْتُمِنَ خَانَ.
+            </div>
+            
+            <div class="translation">
+                হযরত আবু হুরায়রা (রা.) থেকে বর্ণিত, নবী করীম (সা.) বলেছেন: মুনাফিকের আলামত তিনটি: যখন কথা বলে মিথ্যা বলে, যখন ওয়াদা করে ভঙ্গ করে, আর যখন আমানত রাখা হয় খিয়ানত করে।
+            </div>
+            
+            <div class="reference">
+                <i class="fas fa-bookmark"></i>
+                <strong>রেফারেন্স:</strong> সহীহ বুখারী, হাদিস নং: ৩৩, সহীহ মুসলিম, হাদিস নং: ৫৯
+            </div>
+        </article>
+        
+        <!-- অডিও প্লেয়ার -->
+        <section class="audio-player fade-in">
+            <div class="audio-title">
+                <i class="fas fa-headphones"></i>
+                <span>হাদিসের অডিও রিসাইটেশন</span>
+            </div>
+            <audio controls>
+                <source src="#" type="audio/mpeg">
+                আপনার ব্রাউজার অডিও এলিমেন্ট সাপোর্ট করে না।
+            </audio>
+            <div class="mt-2">
+                <small>অডিওটি শুনতে প্লে বাটনে ক্লিক করুন</small>
+            </div>
+        </section>
+        
+        <!-- ডাউনলোড সেকশন -->
+        <section class="download-section fade-in">
+            <a href="#" class="download-btn">
+                <i class="fas fa-print"></i>
+                <span>প্রিন্ট করুন</span>
+            </a>
+            <a href="#" class="download-btn">
+                <i class="fas fa-file-pdf"></i>
+                <span>পিডিএফ ডাউনলোড</span>
+            </a>
+            <a href="#" class="download-btn">
+                <i class="fas fa-share-alt"></i>
+                <span>শেয়ার করুন</span>
+            </a>
+        </section>
+
+        <!-- নেভিগেশন -->
+        <section class="navigation fade-in">
+            <a href="#" class="btn nav-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>পূর্ববর্তী হাদিস</span>
+            </a>
+            <a href="#" class="btn nav-btn">
+                <i class="fas fa-home"></i>
+                <span>হোমপেজ</span>
+            </a>
+            <a href="#" class="btn nav-btn">
+                <span>পরবর্তী হাদিস</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </section>
+        
+        <!-- কমেন্ট সেকশন -->
+        <section class="comments-section fade-in">
+            <h2 class="comments-title">
+                <i class="fas fa-comments"></i>
+                <span>মন্তব্য</span>
+            </h2>
+            
+            <div class="comment-form">
+                <textarea placeholder="আপনার মূল্যবান মন্তব্য লিখুন..."></textarea>
+                <button>
+                    <i class="fas fa-paper-plane"></i>
+                    <span>মন্তব্য জমা দিন</span>
+                </button>
+            </div>
+            
+            <div class="comments-list">
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <i class="fas fa-user"></i>
+                            <span>আব্দুল্লাহ</span>
+                        </div>
+                        <div class="comment-date">২ দিন আগে</div>
+                    </div>
+                    <div class="comment-text">
+                        এই হাদিসটি আমাদের দৈনন্দিন জীবনে খুবই গুরুত্বপূর্ণ। আমানতদারিতা মুমিনের অন্যতম গুণ। আল্লাহ আমাদেরকে মুনাফিকের আলামতগুলো থেকে বেঁচে থাকার তাওফিক দান করুন।
+                    </div>
+                </div>
+                
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <i class="fas fa-user"></i>
+                            <span>ফাতেমা</span>
+                        </div>
+                        <div class="comment-date">১ সপ্তাহ আগে</div>
+                    </div>
+                    <div class="comment-text">
+                        হাদিসটি পড়ে খুবই উপকৃত হলাম। আমাদের সমাজে আজকাল আমানতদারিতার অভাব প্রকটভাবে লক্ষ্য করা যাচ্ছে। এই হাদিসটি সবার জানা উচিত।
+                    </div>
+                </div>
+
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <i class="fas fa-user"></i>
+                            <span>মুহাম্মদ</span>
+                        </div>
+                        <div class="comment-date">৩ সপ্তাহ আগে</div>
+                    </div>
+                    <div class="comment-text">
+                        নবীজি (সা.) এর এই হাদিসটি আমাদেরকে সতর্ক করে দিয়েছে। আমরা যেন কথায়, কাজে এবং আমানতের ক্ষেত্রে সর্বদা সতর্ক থাকি। জাযাকাল্লাহু খাইরান।
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-links">
+            <a href="#">প্রাইভেসি পলিসি</a>
+            <a href="#">ব্যবহারের শর্তাবলী</a>
+            <a href="#">যোগাযোগ</a>
+            <a href="#">সাইটম্যাপ</a>
+            <a href="#">সহায়তা</a>
+        </div>
+        <p>© ২০২৩ হাদিস পড়ুন - সকল অধিকার সংরক্ষিত</p>
+        <p class="mt-1">ওয়েবসাইটটি ইসলামিক শিক্ষা প্রচারের উদ্দেশ্যে তৈরি</p>
+    </footer>
+
+    <!-- ফন্ট সেটিংস মডাল -->
+    <div id="fontSettingsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background: var(--bg-color); padding: 2rem; border-radius: var(--border-radius); max-width: 500px; width: 90%;">
+            <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-font"></i>
+                <span>ফন্ট সেটিংস</span>
+            </h3>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">আরবি ফন্ট নির্বাচন করুন:</label>
+                <select id="arabicFontSelect" style="width: 100%; padding: 0.7rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); background: var(--accent-color); color: var(--text-color);">
+                    <option value="Amiri">Amiri</option>
+                    <option value="Scheherazade New">Scheherazade New</option>
+                </select>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">বাংলা ফন্ট নির্বাচন করুন:</label>
+                <select id="bengaliFontSelect" style="width: 100%; padding: 0.7rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); background: var(--accent-color); color: var(--text-color);">
+                    <option value="Hind Siliguri">Hind Siliguri</option>
+                    <option value="Kalpurush">Kalpurush</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button id="closeFontSettings" style="padding: 0.7rem 1.5rem;">বন্ধ করুন</button>
+                <button id="applyFontSettings" style="padding: 0.7rem 1.5rem; background: var(--primary-color); color: white;">প্রয়োগ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // অ্যাপ্লিকেশন স্টেট
+        const appState = {
+            theme: localStorage.getItem('theme') || 'light',
+            language: localStorage.getItem('language') || 'bn',
+            readerMode: localStorage.getItem('readerMode') === 'true',
+            fontSize: localStorage.getItem('fontSize') || 'default',
+            lineSpacing: localStorage.getItem('lineSpacing') || 'normal',
+            arabicFont: localStorage.getItem('arabicFont') || 'Amiri',
+            bengaliFont: localStorage.getItem('bengaliFont') || 'Hind Siliguri'
+        };
+
+        // DOM কন্টেন্ট লোড হওয়ার পর ইনিশিয়ালাইজেশন
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            applySavedSettings();
+        });
+
+        // অ্যাপ্লিকেশন ইনিশিয়ালাইজেশন
+        function initializeApp() {
+            // ডার্ক মোড প্রয়োগ
+            if (appState.theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeBtn').innerHTML = '<i class="fas fa-sun"></i><span>লাইট মোড</span>';
+            }
+
+            // ভাষা প্রয়োগ
+            document.getElementById('languageSelect').value = appState.language;
+            if (appState.language === 'ar') {
+                document.body.classList.add('rtl');
+            }
+
+            // রিডার মোড প্রয়োগ
+            if (appState.readerMode) {
+                document.body.classList.add('reader-mode');
+                document.getElementById('readerModeBtn').innerHTML = '<i class="fas fa-times"></i><span>সাধারণ মোড</span>';
+            }
+
+            // ফন্ট সেটিংস প্রয়োগ
+            document.documentElement.style.setProperty('--font-family-ar', `'${appState.arabicFont}', serif`);
+            document.documentElement.style.setProperty('--font-family-bn', `'${appState.bengaliFont}', sans-serif`);
+        }
+
+        // ইভেন্ট লিসেনার সেটআপ
+        function setupEventListeners() {
+            // ডার্ক মোড টগল
+            document.getElementById('darkModeBtn').addEventListener('click', toggleDarkMode);
+            
+            // রিডার মোড টগল
+            document.getElementById('readerModeBtn').addEventListener('click', toggleReaderMode);
+            
+            // ভাষা পরিবর্তন
+            document.getElementById('languageSelect').addEventListener('change', changeLanguage);
+            
+            // ফন্ট সেটিংস
+            document.getElementById('fontSettingsBtn').addEventListener('click', showFontSettings);
+            document.getElementById('closeFontSettings').addEventListener('click', closeFontSettings);
+            document.getElementById('applyFontSettings').addEventListener('click', applyFontSettings);
+            
+            // ফন্ট সাইজ কন্ট্রোল
+            document.getElementById('fontSizeDecrease').addEventListener('click', () => changeFontSize('small'));
+            document.getElementById('fontSizeReset').addEventListener('click', () => changeFontSize('default'));
+            document.getElementById('fontSizeIncrease').addEventListener('click', () => changeFontSize('large'));
+            
+            // লাইন স্পেসিং কন্ট্রোল
+            document.getElementById('lineSpacingTight').addEventListener('click', () => changeLineSpacing('tight'));
+            document.getElementById('lineSpacingNormal').addEventListener('click', () => changeLineSpacing('normal'));
+            document.getElementById('lineSpacingWide').addEventListener('click', () => changeLineSpacing('wide'));
+            
+            // সার্চ ফাংশনালিটি
+            document.getElementById('searchBtn').addEventListener('click', performSearch);
+            document.querySelector('.search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // কী-বোর্ড শর্টকাট
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+        }
+
+        // সেভ করা সেটিংস প্রয়োগ
+        function applySavedSettings() {
+            // ফন্ট সাইজ প্রয়োগ
+            if (appState.fontSize !== 'default') {
+                changeFontSize(appState.fontSize, false);
+            }
+            
+            // লাইন স্পেসিং প্রয়োগ
+            if (appState.lineSpacing !== 'normal') {
+                changeLineSpacing(appState.lineSpacing, false);
+            }
+        }
+
+        // ডার্ক মোড টগল ফাংশন
+        function toggleDarkMode() {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            appState.theme = isDarkMode ? 'dark' : 'light';
+            localStorage.setItem('theme', appState.theme);
+            
+            const darkModeBtn = document.getElementById('darkModeBtn');
+            darkModeBtn.innerHTML = isDarkMode ? 
+                '<i class="fas fa-sun"></i><span>লাইট মোড</span>' : 
+                '<i class="fas fa-moon"></i><span>ডার্ক মোড</span>';
+            
+            showNotification(isDarkMode ? 'ডার্ক মোড চালু হয়েছে' : 'লাইট মোড চালু হয়েছে');
+        }
+
+        // রিডার মোড টগল ফাংশন
+        function toggleReaderMode() {
+            const isReaderMode = document.body.classList.toggle('reader-mode');
+            appState.readerMode = isReaderMode;
+            localStorage.setItem('readerMode', isReaderMode);
+            
+            const readerModeBtn = document.getElementById('readerModeBtn');
+            readerModeBtn.innerHTML = isReaderMode ? 
+                '<i class="fas fa-times"></i><span>সাধারণ মোড</span>' : 
+                '<i class="fas fa-book-reader"></i><span>রিডার মোড</span>';
+            
+            showNotification(isReaderMode ? 'রিডার মোড চালু হয়েছে' : 'সাধারণ মোড চালু হয়েছে');
+        }
+
+        // ভাষা পরিবর্তন ফাংশন
+        function changeLanguage() {
+            const selectedLang = document.getElementById('languageSelect').value;
+            appState.language = selectedLang;
+            localStorage.setItem('language', selectedLang);
+            
+            // RTL/LTR হ্যান্ডলিং
+            if (selectedLang === 'ar') {
+                document.body.classList.add('rtl');
+            } else {
+                document.body.classList.remove('rtl');
+            }
+            
+            showNotification(`ভাষা পরিবর্তন করা হয়েছে: ${document.getElementById('languageSelect').options[document.getElementById('languageSelect').selectedIndex].text}`);
+            
+            // এখানে ভাষা পরিবর্তনের লজিক ইমপ্লিমেন্ট করতে হবে
+            // উদাহরণ: API কল করে কন্টেন্ট ট্রান্সলেট করা
+        }
+
+        // ফন্ট সাইজ পরিবর্তন
+        function changeFontSize(size, showNotification = true) {
+            let fontSize;
+            switch(size) {
+                case 'small':
+                    fontSize = '14px';
+                    break;
+                case 'large':
+                    fontSize = '18px';
+                    break;
+                default:
+                    fontSize = '16px';
+            }
+            
+            document.documentElement.style.setProperty('--font-size-base', fontSize);
+            appState.fontSize = size;
+            localStorage.setItem('fontSize', size);
+            
+            // অ্যাক্টিভ বাটন আপডেট
+            updateActiveButton('fontSize', size);
+            
+            if (showNotification) {
+                showNotification(`ফন্ট সাইজ ${size === 'small' ? 'ছোট' : size === 'large' ? 'বড়' : 'ডিফল্ট'} করা হয়েছে`);
+            }
+        }
+
+        // লাইন স্পেসিং পরিবর্তন
+        function changeLineSpacing(spacing, showNotification = true) {
+            let lineHeight;
+            switch(spacing) {
+                case 'tight':
+                    lineHeight = '1.3';
+                    break;
+                case 'wide':
+                    lineHeight = '2';
+                    break;
+                default:
+                    lineHeight = '1.6';
+            }
+            
+            document.documentElement.style.setProperty('--line-height-base', lineHeight);
+            appState.lineSpacing = spacing;
+            localStorage.setItem('lineSpacing', spacing);
+            
+            // অ্যাক্টিভ বাটন আপডেট
+            updateActiveButton('lineSpacing', spacing);
+            
+            if (showNotification) {
+                showNotification(`লাইন স্পেসিং ${spacing === 'tight' ? 'ঘন' : spacing === 'wide' ? 'ফাঁকা' : 'সাধারণ'} করা হয়েছে`);
+            }
+        }
+
+        // অ্যাক্টিভ বাটন আপডেট
+        function updateActiveButton(type, value) {
+            const buttons = {
+                fontSize: ['fontSizeDecrease', 'fontSizeReset', 'fontSizeIncrease'],
+                lineSpacing: ['lineSpacingTight', 'lineSpacingNormal', 'lineSpacingWide']
+            };
+            
+            const values = {
+                fontSize: { 'small': 'fontSizeDecrease', 'default': 'fontSizeReset', 'large': 'fontSizeIncrease' },
+                lineSpacing: { 'tight': 'lineSpacingTight', 'normal': 'lineSpacingNormal', 'wide': 'lineSpacingWide' }
+            };
+            
+            // সব বাটন থেকে active ক্লাস রিমুভ
+            buttons[type].forEach(id => {
+                document.getElementById(id).classList.remove('active');
+            });
+            
+            // নির্বাচিত বাটনে active ক্লাস অ্যাড
+            document.getElementById(values[type][value]).classList.add('active');
+        }
+
+        // ফন্ট সেটিংস মডাল দেখান
+        function showFontSettings() {
+            document.getElementById('fontSettingsModal').style.display = 'flex';
+            document.getElementById('arabicFontSelect').value = appState.arabicFont;
+            document.getElementById('bengaliFontSelect').value = appState.bengaliFont;
+        }
+
+        // ফন্ট সেটিংস মডাল বন্ধ
+        function closeFontSettings() {
+            document.getElementById('fontSettingsModal').style.display = 'none';
+        }
+
+        // ফন্ট সেটিংস প্রয়োগ
+        function applyFontSettings() {
+            const arabicFont = document.getElementById('arabicFontSelect').value;
+            const bengaliFont = document.getElementById('bengaliFontSelect').value;
+            
+            document.documentElement.style.setProperty('--font-family-ar', `'${arabicFont}', serif`);
+            document.documentElement.style.setProperty('--font-family-bn', `'${bengaliFont}', sans-serif`);
+            
+            appState.arabicFont = arabicFont;
+            appState.bengaliFont = bengaliFont;
+            
+            localStorage.setItem('arabicFont', arabicFont);
+            localStorage.setItem('bengaliFont', bengaliFont);
+            
+            closeFontSettings();
+            showNotification('ফন্ট সেটিংস প্রয়োগ করা হয়েছে');
+        }
+
+        // সার্চ 수행
+        function performSearch() {
+            const query = document.querySelector('.search-input').value.trim();
+            if (query) {
+                showNotification(`"${query}" এর জন্য সার্চ করা হচ্ছে...`);
+                // এখানে সার্চ লজিক ইমপ্লিমেন্ট করতে হবে
+            } else {
+                showNotification('দয়া করে সার্চ করার জন্য কিছু লিখুন', 'error');
+            }
+        }
+
+        // কী-বোর্ড শর্টকাট হ্যান্ডলিং
+        function handleKeyboardShortcuts(e) {
+            // Ctrl+R = রিডার মোড টগল
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                toggleReaderMode();
+            }
+            
+            // Ctrl+D = ডার্ক মোড টগল
+            if (e.ctrlKey && e.key === 'd') {
+                e.preventDefault();
+                toggleDarkMode();
+            }
+            
+            // Ctrl+Plus = ফন্ট বড়
+            if (e.ctrlKey && (e.key === '+' || e.key === '=')) {
+                e.preventDefault();
+                changeFontSize('large');
+            }
+            
+            // Ctrl+Minus = ফন্ট ছোট
+            if (e.ctrlKey && e.key === '-') {
+                e.preventDefault();
+                changeFontSize('small');
+            }
+            
+            // Ctrl+0 = ফন্ট ডিফল্ট
+            if (e.ctrlKey && e.key === '0') {
+                e.preventDefault();
+                changeFontSize('default');
+            }
+        }
+
+        // নোটিফিকেশন শো
+        function showNotification(message, type = 'success') {
+            // নোটিফিকেশন এলিমেন্ট তৈরি
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                background: ${type === 'error' ? 'var(--error-color)' : 'var(--primary-color)'};
+                color: white;
+                border-radius: var(--border-radius);
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateX(150%);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // অ্যানিমেশন
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // অটো হাইড
+            setTimeout(() => {
+                notification.style.transform = 'translateX(150%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // অফলাইন সাপোর্ট চেক
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // পারফরম্যান্স মনিটরিং
+        window.addEventListener('load', () => {
+            // LCP মনিটরিং
+            const lcpElement = document.querySelector('.arabic-text');
+            if (lcpElement) {
+                const observer = new PerformanceObserver((entryList) => {
+                    const entries = entryList.getEntries();
+                    const lastEntry = entries[entries.length - 1];
+                    console.log('LCP:', lastEntry.startTime);
+                });
+                observer.observe({entryTypes: ['largest-contentful-paint']});
+            }
+        });
+    </script>
+
+</body></html>
