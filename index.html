@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ফেসবুক স্টাইল RSS ফিড</title>
+    <title>আমার RSS ফিড</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Hind Siliguri', sans-serif;
         }
 
         :root {
-            --primary: #1877f2;
-            --secondary: #42b883;
-            --bg-color: #f0f2f5;
+            --primary: #2c5aa0;
+            --secondary: #4a7bc8;
+            --bg-color: #f8f9fa;
             --card-bg: #ffffff;
-            --text-primary: #1c1e21;
-            --text-secondary: #65676b;
-            --border: #dddfe2;
-            --shadow: rgba(0, 0, 0, 0.1);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.08);
         }
 
         body {
@@ -30,255 +30,224 @@
             line-height: 1.6;
         }
 
-        .dark-mode {
-            --bg-color: #18191a;
-            --card-bg: #242526;
-            --text-primary: #e4e6eb;
-            --text-secondary: #b0b3b8;
-            --border: #3e4042;
-            --shadow: rgba(255, 255, 255, 0.05);
-        }
-
         .container {
-            max-width: 680px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
 
         header {
-            background-color: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px var(--shadow);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--primary);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
         }
 
         .logo i {
             color: var(--primary);
-            font-size: 28px;
+            font-size: 32px;
         }
 
         .logo h1 {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary);
         }
 
-        .controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background-color: var(--card-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-top: 5px;
         }
 
         .loading {
             text-align: center;
-            padding: 30px;
+            padding: 40px 20px;
             color: var(--text-secondary);
         }
 
         .loading i {
             font-size: 40px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             color: var(--primary);
         }
 
         .post {
             background: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 2px 4px var(--shadow);
-            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow);
+            margin-bottom: 25px;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border);
         }
 
         .post:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-
-        .post-header {
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .post-info h3 {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .post-info .date {
-            font-size: 13px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
         }
 
         .post-content {
-            padding: 15px;
+            padding: 25px;
         }
 
         .post-title {
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             line-height: 1.4;
+            color: var(--primary);
         }
 
         .post-description {
             color: var(--text-primary);
-            margin-bottom: 15px;
-            line-height: 1.5;
+            margin-bottom: 20px;
+            line-height: 1.7;
+            font-size: 16px;
         }
 
         .post-image {
             width: 100%;
             border-radius: 8px;
             margin-bottom: 15px;
-            max-height: 400px;
-            object-fit: cover;
+            display: block;
+            max-height: 500px;
+            object-fit: contain;
+            background-color: #f5f5f5;
         }
 
-        .post-actions {
+        .post-meta {
             display: flex;
-            justify-content: space-around;
-            padding: 10px 15px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: #f8fafc;
             border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
-        .action-btn {
+        .post-date {
             display: flex;
             align-items: center;
             gap: 5px;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: all 0.2s ease;
         }
 
-        .action-btn:hover {
-            background-color: var(--bg-color);
-            color: var(--primary);
-        }
-
-        .action-btn.active {
-            color: var(--primary);
+        .post-source {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .error {
             background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 2px 4px var(--shadow);
+            box-shadow: 0 4px 12px var(--shadow);
             margin-bottom: 20px;
+            border: 1px solid #fed7d7;
         }
 
         .error i {
-            font-size: 40px;
-            color: #ff4757;
+            font-size: 48px;
+            color: #e53e3e;
+            margin-bottom: 15px;
+        }
+
+        .error h3 {
+            color: #c53030;
             margin-bottom: 10px;
         }
 
         .refresh-btn {
-            margin-top: 15px;
+            margin-top: 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
         }
 
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 30px 20px;
             color: var(--text-secondary);
             font-size: 14px;
-            margin-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
         }
 
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
             color: var(--text-secondary);
         }
 
         .empty-state i {
-            font-size: 60px;
-            margin-bottom: 15px;
+            font-size: 64px;
+            margin-bottom: 20px;
             color: var(--primary);
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
-            }
-            
-            header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
+                padding: 15px;
             }
             
             .logo h1 {
-                font-size: 20px;
+                font-size: 24px;
             }
             
             .post-title {
-                font-size: 16px;
+                font-size: 20px;
+            }
+            
+            .post-content {
+                padding: 20px;
+            }
+            
+            .post-meta {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
             }
         }
 
-        /* Animation for new posts */
+        @media (max-width: 480px) {
+            .post-title {
+                font-size: 18px;
+            }
+            
+            .post-description {
+                font-size: 15px;
+            }
+            
+            .post-image {
+                max-height: 300px;
+            }
+        }
+
+        /* Animation for posts */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -293,16 +262,11 @@
     <div class="container">
         <header>
             <div class="logo">
-                <i class="fab fa-facebook"></i>
-                <h1>সোশ্যাল ফিড</h1>
+                <i class="fas fa-rss"></i>
+                <h1>আমার RSS ফিড</h1>
             </div>
-            <div class="controls">
-                <button class="btn" id="refreshBtn">
-                    <i class="fas fa-sync-alt"></i> রিফ্রেশ
-                </button>
-                <button class="btn btn-secondary" id="themeBtn">
-                    <i class="fas fa-moon"></i> ডার্ক মোড
-                </button>
+            <div class="tagline">
+                সর্বশেষ আপডেটগুলি এক জায়গায়
             </div>
         </header>
 
@@ -314,37 +278,16 @@
         </main>
 
         <footer>
-            <p>© ২০২৩ সোশ্যাল ফিড | RSS ফিড রিডার</p>
+            <p>© ২০২৩ আমার RSS ফিড | সকল অধিকার সংরক্ষিত</p>
         </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const feedContainer = document.getElementById('feed');
-            const refreshBtn = document.getElementById('refreshBtn');
-            const themeBtn = document.getElementById('themeBtn');
             
             // RSS feed URL
             const RSS_URL = "https://rss.app/feeds/xz4k6G8x8RLb3XZT.xml";
-            
-            // Check for saved theme preference
-            if (localStorage.getItem('darkMode') === 'enabled') {
-                document.body.classList.add('dark-mode');
-                themeBtn.innerHTML = '<i class="fas fa-sun"></i> লাইট মোড';
-            }
-            
-            // Theme toggle functionality
-            themeBtn.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                
-                if (document.body.classList.contains('dark-mode')) {
-                    localStorage.setItem('darkMode', 'enabled');
-                    themeBtn.innerHTML = '<i class="fas fa-sun"></i> লাইট মোড';
-                } else {
-                    localStorage.setItem('darkMode', 'disabled');
-                    themeBtn.innerHTML = '<i class="fas fa-moon"></i> ডার্ক মোড';
-                }
-            });
             
             // Load posts function
             function loadPosts() {
@@ -355,7 +298,7 @@
                     </div>
                 `;
                 
-                // সরাসরি rss2json API কল করছি - কোনো proxy ছাড়াই
+                // সরাসরি rss2json API কল করছি
                 fetch(`https://api.rss2json.com/v1/api.json?rss_url=${RSS_URL}`)
                     .then(response => {
                         if (!response.ok) {
@@ -384,9 +327,9 @@
                     // Extract image from content if available
                     let imageHtml = '';
                     if (post.enclosure && post.enclosure.link) {
-                        imageHtml = `<img src="${post.enclosure.link}" class="post-image" alt="Post image">`;
+                        imageHtml = `<img src="${post.enclosure.link}" class="post-image" alt="Post image" loading="lazy">`;
                     } else if (post.thumbnail) {
-                        imageHtml = `<img src="${post.thumbnail}" class="post-image" alt="Post image">`;
+                        imageHtml = `<img src="${post.thumbnail}" class="post-image" alt="Post image" loading="lazy">`;
                     }
                     
                     // Format date
@@ -402,31 +345,17 @@
                     // Create post HTML
                     html += `
                         <div class="post" style="animation-delay: ${index * 0.1}s">
-                            <div class="post-header">
-                                <div class="avatar">
-                                    <i class="fas fa-newspaper"></i>
-                                </div>
-                                <div class="post-info">
-                                    <h3>RSS ফিড</h3>
-                                    <div class="date">
-                                        <i class="far fa-clock"></i> ${formattedDate}
-                                    </div>
-                                </div>
-                            </div>
                             <div class="post-content">
                                 <h2 class="post-title">${post.title || 'শিরোনাম নেই'}</h2>
                                 <div class="post-description">${post.description || 'বর্ণনা নেই'}</div>
                                 ${imageHtml}
                             </div>
-                            <div class="post-actions">
-                                <div class="action-btn like-btn">
-                                    <i class="far fa-thumbs-up"></i> লাইক
+                            <div class="post-meta">
+                                <div class="post-date">
+                                    <i class="far fa-clock"></i> ${formattedDate}
                                 </div>
-                                <div class="action-btn comment-btn">
-                                    <i class="far fa-comment"></i> কমেন্ট
-                                </div>
-                                <div class="action-btn share-btn">
-                                    <i class="far fa-share-square"></i> শেয়ার
+                                <div class="post-source">
+                                    <i class="fas fa-rss"></i> RSS ফিড
                                 </div>
                             </div>
                         </div>
@@ -434,30 +363,6 @@
                 });
                 
                 feedContainer.innerHTML = html;
-                
-                // Add interaction to action buttons
-                document.querySelectorAll('.like-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        this.classList.toggle('active');
-                        if (this.classList.contains('active')) {
-                            this.innerHTML = '<i class="fas fa-thumbs-up"></i> লাইকড';
-                        } else {
-                            this.innerHTML = '<i class="far fa-thumbs-up"></i> লাইক';
-                        }
-                    });
-                });
-                
-                document.querySelectorAll('.comment-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        alert('কমেন্ট ফিচারটি শীঘ্রই আসছে!');
-                    });
-                });
-                
-                document.querySelectorAll('.share-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        alert('শেয়ার ফিচারটি শীঘ্রই আসছে!');
-                    });
-                });
             }
             
             // Show error function
@@ -467,7 +372,7 @@
                         <i class="fas fa-exclamation-triangle"></i>
                         <h3>সমস্যা হয়েছে</h3>
                         <p>${message}</p>
-                        <button class="btn refresh-btn" id="retryBtn">
+                        <button class="refresh-btn" id="retryBtn">
                             <i class="fas fa-redo"></i> আবার চেষ্টা করুন
                         </button>
                     </div>
@@ -475,12 +380,6 @@
                 
                 document.getElementById('retryBtn').addEventListener('click', loadPosts);
             }
-            
-            // Refresh button functionality
-            refreshBtn.addEventListener('click', loadPosts);
-            
-            // Auto-refresh every 5 minutes
-            setInterval(loadPosts, 300000);
             
             // Initial load
             loadPosts();
