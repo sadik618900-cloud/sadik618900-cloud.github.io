@@ -5,167 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>আমার ফিড</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', 'Hind Siliguri', Arial, sans-serif; background: #f8f9fa; padding: 20px; line-height: 1.6; }
+
+        .container { max-width: 700px; margin: auto; }
+        .header { text-align: center; margin-bottom: 30px; padding: 20px 0; }
+        .header h1 { color: #2c5aa0; font-size: 28px; margin-bottom: 5px; }
+        .header p { color: #666; font-size: 16px; }
+
+        .post { background: #fff; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); margin-bottom: 25px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .post:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.12); }
+
+        .post img { width: 100%; height: auto; display: block; border-bottom: 1px solid #f1f1f1; margin-bottom: 10px; cursor: pointer; }
+        .post-content { padding: 20px; }
+        .post-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #2d3748; line-height: 1.4; }
+        .post-description { font-size: 15px; color: #4a5568; line-height: 1.6; }
+        .post-date { padding: 15px 20px; border-top: 1px solid #f1f1f1; font-size: 14px; color: #718096; }
+
+        .loading { text-align: center; padding: 40px 20px; color: #666; }
+        .loading-spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #2c5aa0; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .error { text-align: center; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.08); color: #e53e3e; }
+        .empty-state { text-align: center; padding: 50px 20px; color: #666; }
+        .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; margin-top: 30px; }
+
+        /* Lightbox CSS */
+        #lightbox-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
         }
-        
-        body { 
-            font-family: 'Segoe UI', 'Hind Siliguri', Arial, sans-serif; 
-            background: #f8f9fa; 
-            padding: 20px; 
-            line-height: 1.6;
+        #lightbox-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
-        
-        .container { 
-            max-width: 700px; 
-            margin: auto; 
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
-        }
-        
-        .header h1 {
-            color: #2c5aa0;
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-        
-        .header p {
-            color: #666;
-            font-size: 16px;
-        }
-        
-        .post { 
-            background: #fff; 
-            border-radius: 12px; 
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08); 
-            margin-bottom: 25px; 
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .post:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
-        }
-        
-        .post img { 
-            width: 100%; 
-            height: auto; 
-            display: block; 
-            border-bottom: 1px solid #f1f1f1;
-            margin-bottom: 10px;
-        }
-        
-        .post-content {
-            padding: 20px;
-        }
-        
-        .post-title { 
-            font-size: 20px; 
-            font-weight: 700; 
-            margin-bottom: 12px;
-            color: #2d3748;
-            line-height: 1.4;
-        }
-        
-        .post-description { 
-            font-size: 15px; 
-            color: #4a5568; 
-            line-height: 1.6;
-        }
-        
-        .post-date {
-            padding: 15px 20px;
-            border-top: 1px solid #f1f1f1;
-            font-size: 14px;
-            color: #718096;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-        }
-        
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #2c5aa0;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .error {
-            text-align: center;
-            padding: 30px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-            color: #e53e3e;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #666;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 14px;
-            margin-top: 30px;
-        }
-        
-        @media (max-width: 768px) {
-            body { 
-                padding: 15px; 
-            }
-            
-            .header h1 {
-                font-size: 24px;
-            }
-            
-            .post-title { 
-                font-size: 18px; 
-            }
-            
-            .post-content {
-                padding: 15px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body { 
-                padding: 10px; 
-            }
-            
-            .header {
-                margin-bottom: 20px;
-            }
-            
-            .post-title { 
-                font-size: 17px; 
-            }
-            
-            .post-description { 
-                font-size: 14px; 
-            }
-        }
+
+        @media (max-width: 768px) { body { padding: 15px; } .header h1 { font-size: 24px; } .post-title { font-size: 18px; } .post-content { padding: 15px; } }
+        @media (max-width: 480px) { body { padding: 10px; } .header { margin-bottom: 20px; } .post-title { font-size: 17px; } .post-description { font-size: 14px; } }
     </style>
 </head>
 <body>
@@ -174,90 +58,62 @@
             <h1>আমার ফিড</h1>
             <p>সর্বশেষ আপডেটগুলি</p>
         </div>
-        
         <div id="feed">
             <div class="loading">
                 <div class="loading-spinner"></div>
                 <p>পোস্ট লোড হচ্ছে...</p>
             </div>
         </div>
-        
-        <div class="footer">
-            © ২০২৫ আমার ফিড | সব আপডেট এক জায়গায়
-        </div>
+        <div class="footer">© ২০২৫ আমার ফিড | সব আপডেট এক জায়গায়</div>
+    </div>
+
+    <!-- Lightbox overlay -->
+    <div id="lightbox-overlay" onclick="hideLightbox()">
+        <img id="lightbox-image" src="" alt="Large Image">
     </div>
 
     <script>
         const RSS_URL = "https://rss.app/feeds/xz4k6G8x8RLb3XZT.xml";
-        
+
         function formatDate(dateString) {
             const date = new Date(dateString);
-            return date.toLocaleDateString('bn-BD', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+            return date.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
         }
-        
-        function extractTextFromHTML(html) {
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
-            return temp.textContent || temp.innerText || '';
-        }
-        
-        function isValidImageURL(url) {
-            return url && (url.startsWith('http://') || url.startsWith('https://'));
-        }
-        
+        function extractTextFromHTML(html) { const temp = document.createElement('div'); temp.innerHTML = html; return temp.textContent || temp.innerText || ''; }
+        function isValidImageURL(url) { return url && (url.startsWith('http://') || url.startsWith('https://')); }
         function extractAllImages(description) {
             const temp = document.createElement('div');
             temp.innerHTML = description;
-            const images = temp.querySelectorAll('img');
             let imageHTML = '';
-            images.forEach(img => {
+            temp.querySelectorAll('img').forEach(img => {
                 const src = img.getAttribute('src');
-                if (isValidImageURL(src)) {
-                    imageHTML += `<img src="${src}" alt="Image" loading="lazy">`;
-                }
+                if (isValidImageURL(src)) imageHTML += `<img src="${src}" alt="Image" loading="lazy" onclick="showLightbox(this.src)">`;
             });
             return imageHTML;
         }
-        
+
         function loadFeed() {
             const feed = document.getElementById('feed');
-            
             fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`)
-            .then(res => {
-                if (!res.ok) throw new Error(`নেটওয়ার্ক ত্রুটি: ${res.status}`);
-                return res.json();
-            })
+            .then(res => { if (!res.ok) throw new Error(`নেটওয়ার্ক ত্রুটি: ${res.status}`); return res.json(); })
             .then(data => {
-                if(data.status === 'ok' && data.items && data.items.length > 0){
+                if(data.status==='ok' && data.items && data.items.length>0){
                     let html = '';
                     data.items.forEach(post => {
                         let imagesHTML = '';
                         const enclosureImage = post.enclosure && post.enclosure.link;
                         const thumbnailImage = post.thumbnail;
-                        
-                        if (isValidImageURL(enclosureImage)) imagesHTML += `<img src="${enclosureImage}" alt="Image" loading="lazy">`;
-                        if (isValidImageURL(thumbnailImage)) imagesHTML += `<img src="${thumbnailImage}" alt="Image" loading="lazy">`;
-                        if (post.description) imagesHTML += extractAllImages(post.description);
-                        
+
+                        if(isValidImageURL(enclosureImage)) imagesHTML += `<img src="${enclosureImage}" alt="Image" loading="lazy" onclick="showLightbox(this.src)">`;
+                        if(isValidImageURL(thumbnailImage)) imagesHTML += `<img src="${thumbnailImage}" alt="Image" loading="lazy" onclick="showLightbox(this.src)">`;
+                        if(post.description) imagesHTML += extractAllImages(post.description);
+
                         const title = post.title ? post.title.trim() : 'শিরোনাম নেই';
                         let description = post.description ? extractTextFromHTML(post.description).trim() : '';
-                        if (description.length > 200) description = description.substring(0, 200) + '...';
+                        if(description.length>200) description = description.substring(0,200)+'...';
                         const date = post.pubDate ? formatDate(post.pubDate) : '';
-                        
-                        html += `
-                            <div class="post">
-                                ${imagesHTML}
-                                <div class="post-content">
-                                    <div class="post-title">${title}</div>
-                                    <div class="post-description">${description}</div>
-                                </div>
-                                ${date ? `<div class="post-date">প্রকাশিত: ${date}</div>` : ''}
-                            </div>
-                        `;
+
+                        html += `<div class="post">${imagesHTML}<div class="post-content"><div class="post-title">${title}</div><div class="post-description">${description}</div></div>${date?`<div class="post-date">প্রকাশিত: ${date}</div>`:''}</div>`;
                     });
                     feed.innerHTML = html;
                 } else {
@@ -266,17 +122,19 @@
             })
             .catch(err => {
                 console.error('ফিড লোড ত্রুটি:', err);
-                feed.innerHTML = `
-                    <div class="error">
-                        <p>ফিড লোড করতে সমস্যা হয়েছে।</p>
-                        <button onclick="loadFeed()" style="margin-top:15px; padding:8px 16px; background:#2c5aa0; color:white; border:none; border-radius:5px; cursor:pointer;">
-                            আবার চেষ্টা করুন
-                        </button>
-                    </div>
-                `;
+                feed.innerHTML = `<div class="error"><p>ফিড লোড করতে সমস্যা হয়েছে।</p><button onclick="loadFeed()" style="margin-top:15px;padding:8px 16px;background:#2c5aa0;color:white;border:none;border-radius:5px;cursor:pointer;">আবার চেষ্টা করুন</button></div>`;
             });
         }
-        
+
+        // Lightbox functions
+        function showLightbox(src){
+            document.getElementById('lightbox-image').src = src;
+            document.getElementById('lightbox-overlay').style.display = 'flex';
+        }
+        function hideLightbox(){
+            document.getElementById('lightbox-overlay').style.display = 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', loadFeed);
     </script>
 </body>
