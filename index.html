@@ -1,60 +1,290 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>কাস্টম ফিড</title>
-<style>
-    body { font-family: Arial, sans-serif; background: #f5f5f5; margin:0; padding:20px; }
-    .container { max-width: 700px; margin: auto; }
-    .post { background: #fff; border-radius:10px; box-shadow:0 3px 8px rgba(0,0,0,0.1); margin-bottom:20px; overflow:hidden; }
-    .post img { width:100%; height:auto; display:block; }
-    .post-title { font-size:18px; font-weight:600; padding:15px; }
-    .post-description { font-size:15px; padding:0 15px 15px 15px; color:#333; line-height:1.5; }
-    @media (max-width:768px) {
-        body { padding:10px; }
-        .post-title { font-size:16px; }
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>কাস্টম ফিড</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', 'Hind Siliguri', Arial, sans-serif; 
+            background: #f8f9fa; 
+            margin: 0; 
+            padding: 20px; 
+            line-height: 1.6;
+        }
+        
+        .container { 
+            max-width: 700px; 
+            margin: auto; 
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+        
+        .header h1 {
+            color: #2c5aa0;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .post { 
+            background: #fff; 
+            border-radius: 12px; 
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08); 
+            margin-bottom: 25px; 
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .post:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        }
+        
+        .post img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            max-height: 400px;
+            object-fit: cover;
+        }
+        
+        .post-content {
+            padding: 20px;
+        }
+        
+        .post-title { 
+            font-size: 20px; 
+            font-weight: 700; 
+            margin-bottom: 12px;
+            color: #2d3748;
+            line-height: 1.4;
+        }
+        
+        .post-description { 
+            font-size: 15px; 
+            color: #4a5568; 
+            line-height: 1.6;
+        }
+        
+        .post-meta {
+            padding: 15px 20px;
+            border-top: 1px solid #f1f1f1;
+            font-size: 14px;
+            color: #718096;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2c5aa0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            text-align: center;
+            padding: 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            color: #e53e3e;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+        
+        .empty-state img {
+            max-width: 200px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            body { 
+                padding: 15px; 
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .post-title { 
+                font-size: 18px; 
+            }
+            
+            .post-content {
+                padding: 15px;
+            }
+            
+            .post-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body { 
+                padding: 10px; 
+            }
+            
+            .header {
+                margin-bottom: 20px;
+            }
+            
+            .post-title { 
+                font-size: 17px; 
+            }
+            
+            .post-description { 
+                font-size: 14px; 
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container" id="feed">
-    <p style="text-align:center; color:#777;">লোড হচ্ছে...</p>
-</div>
+    <div class="container">
+        <div class="header">
+            <h1>কাস্টম ফিড</h1>
+            <p>সর্বশেষ আপডেটগুলি এক জায়গায়</p>
+        </div>
+        
+        <div id="feed">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>পোস্ট লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
 
-<script>
-const RSS_URL = "https://rss.app/feeds/xz4k6G8x8RLb3XZT.xml";
-
-fetch(`https://api.rss2json.com/v1/api.json?rss_url=${RSS_URL}`)
-.then(res => res.json())
-.then(data => {
-    const feed = document.getElementById('feed');
-    if(data.status==='ok' && data.items.length>0){
-        let html = '';
-        data.items.forEach(post => {
-            let img = '';
-            if(post.enclosure && post.enclosure.link){
-                img = `<img src="${post.enclosure.link}" alt="Image">`;
-            } else if(post.thumbnail){
-                img = `<img src="${post.thumbnail}" alt="Image">`;
-            }
-            html += `
-                <div class="post">
-                    ${img}
-                    <div class="post-title">${post.title || ''}</div>
-                    <div class="post-description">${post.description || ''}</div>
-                </div>
-            `;
-        });
-        feed.innerHTML = html;
-    } else {
-        feed.innerHTML = '<p style="text-align:center; color:#777;">কোনো পোস্ট পাওয়া যায়নি।</p>';
-    }
-})
-.catch(err => {
-    document.getElementById('feed').innerHTML = '<p style="text-align:center; color:red;">ফিড লোড করতে সমস্যা হয়েছে।</p>';
-    console.error(err);
-});
-</script>
+    <script>
+        const RSS_URL = "https://rss.app/feeds/xz4k6G8x8RLb3XZT.xml";
+        
+        // ফাংশন: তারিখ ফরম্যাট করতে
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('bn-BD', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+        
+        // ফাংশন: HTML থেকে টেক্সট এক্সট্র্যাক্ট করতে
+        function extractTextFromHTML(html) {
+            const temp = document.createElement('div');
+            temp.innerHTML = html;
+            return temp.textContent || temp.innerText || '';
+        }
+        
+        // ফাংশন: ছবির URL ভ্যালিডেট করতে
+        function isValidImageURL(url) {
+            return url && (url.startsWith('http://') || url.startsWith('https://'));
+        }
+        
+        // ফাংশন: ডাটা লোড করতে
+        function loadFeed() {
+            const feed = document.getElementById('feed');
+            
+            fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`নেটওয়ার্ক ত্রুটি: ${res.status}`);
+                }
+                return res.json();
+            })
+            .then(data => {
+                if(data.status === 'ok' && data.items && data.items.length > 0){
+                    let html = '';
+                    data.items.forEach(post => {
+                        let img = '';
+                        const imageURL = (post.enclosure && post.enclosure.link) || post.thumbnail;
+                        
+                        if (isValidImageURL(imageURL)) {
+                            img = `<img src="${imageURL}" alt="${post.title || 'Image'}" loading="lazy">`;
+                        }
+                        
+                        const title = post.title ? post.title.trim() : 'শিরোনাম নেই';
+                        let description = post.description ? extractTextFromHTML(post.description).trim() : '';
+                        
+                        // বর্ণনা খুব দীর্ঘ হলে সংক্ষিপ্ত করা
+                        if (description.length > 200) {
+                            description = description.substring(0, 200) + '...';
+                        }
+                        
+                        const date = post.pubDate ? formatDate(post.pubDate) : '';
+                        
+                        html += `
+                            <div class="post">
+                                ${img}
+                                <div class="post-content">
+                                    <div class="post-title">${title}</div>
+                                    <div class="post-description">${description}</div>
+                                </div>
+                                ${date ? `<div class="post-meta">
+                                    <span>প্রকাশিত: ${date}</span>
+                                    <span>সূত্র: RSS ফিড</span>
+                                </div>` : ''}
+                            </div>
+                        `;
+                    });
+                    feed.innerHTML = html;
+                } else {
+                    feed.innerHTML = `
+                        <div class="empty-state">
+                            <p>কোনো পোস্ট পাওয়া যায়নি।</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(err => {
+                console.error('ফিড লোড ত্রুটি:', err);
+                feed.innerHTML = `
+                    <div class="error">
+                        <p>ফিড লোড করতে সমস্যা হয়েছে।</p>
+                        <p><small>${err.message}</small></p>
+                        <button onclick="loadFeed()" style="margin-top: 15px; padding: 8px 16px; background: #2c5aa0; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            আবার চেষ্টা করুন
+                        </button>
+                    </div>
+                `;
+            });
+        }
+        
+        // পেজ লোড হলে ফিড লোড করতে
+        document.addEventListener('DOMContentLoaded', loadFeed);
+    </script>
 </body>
 </html>
