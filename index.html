@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>কাস্টম ফিড</title>
+    <title>আমার ফিড</title>
     <style>
         * {
             margin: 0;
@@ -14,7 +14,6 @@
         body { 
             font-family: 'Segoe UI', 'Hind Siliguri', Arial, sans-serif; 
             background: #f8f9fa; 
-            margin: 0; 
             padding: 20px; 
             line-height: 1.6;
         }
@@ -59,8 +58,8 @@
             width: 100%; 
             height: auto; 
             display: block; 
-            max-height: 400px;
-            object-fit: cover;
+            border-bottom: 1px solid #f1f1f1;
+            margin-bottom: 10px;
         }
         
         .post-content {
@@ -81,13 +80,11 @@
             line-height: 1.6;
         }
         
-        .post-meta {
+        .post-date {
             padding: 15px 20px;
             border-top: 1px solid #f1f1f1;
             font-size: 14px;
             color: #718096;
-            display: flex;
-            justify-content: space-between;
         }
         
         .loading {
@@ -126,10 +123,12 @@
             color: #666;
         }
         
-        .empty-state img {
-            max-width: 200px;
-            margin-bottom: 20px;
-            opacity: 0.7;
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            margin-top: 30px;
         }
         
         @media (max-width: 768px) {
@@ -147,11 +146,6 @@
             
             .post-content {
                 padding: 15px;
-            }
-            
-            .post-meta {
-                flex-direction: column;
-                gap: 8px;
             }
         }
         
@@ -177,8 +171,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>কাস্টম ফিড</h1>
-            <p>সর্বশেষ আপডেটগুলি এক জায়গায়</p>
+            <h1>আমার ফিড</h1>
+            <p>সর্বশেষ আপডেটগুলি</p>
         </div>
         
         <div id="feed">
@@ -187,12 +181,15 @@
                 <p>পোস্ট লোড হচ্ছে...</p>
             </div>
         </div>
+        
+        <div class="footer">
+            © ২০২৫ আমার ফিড | সব আপডেট এক জায়গায়
+        </div>
     </div>
 
     <script>
         const RSS_URL = "https://rss.app/feeds/xz4k6G8x8RLb3XZT.xml";
         
-        // ফাংশন: তারিখ ফরম্যাট করতে
         function formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('bn-BD', {
@@ -202,71 +199,69 @@
             });
         }
         
-        // ফাংশন: HTML থেকে টেক্সট এক্সট্র্যাক্ট করতে
         function extractTextFromHTML(html) {
             const temp = document.createElement('div');
             temp.innerHTML = html;
             return temp.textContent || temp.innerText || '';
         }
         
-        // ফাংশন: ছবির URL ভ্যালিডেট করতে
         function isValidImageURL(url) {
             return url && (url.startsWith('http://') || url.startsWith('https://'));
         }
         
-        // ফাংশন: ডাটা লোড করতে
+        function extractAllImages(description) {
+            const temp = document.createElement('div');
+            temp.innerHTML = description;
+            const images = temp.querySelectorAll('img');
+            let imageHTML = '';
+            images.forEach(img => {
+                const src = img.getAttribute('src');
+                if (isValidImageURL(src)) {
+                    imageHTML += `<img src="${src}" alt="Image" loading="lazy">`;
+                }
+            });
+            return imageHTML;
+        }
+        
         function loadFeed() {
             const feed = document.getElementById('feed');
             
             fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`)
             .then(res => {
-                if (!res.ok) {
-                    throw new Error(`নেটওয়ার্ক ত্রুটি: ${res.status}`);
-                }
+                if (!res.ok) throw new Error(`নেটওয়ার্ক ত্রুটি: ${res.status}`);
                 return res.json();
             })
             .then(data => {
                 if(data.status === 'ok' && data.items && data.items.length > 0){
                     let html = '';
                     data.items.forEach(post => {
-                        let img = '';
-                        const imageURL = (post.enclosure && post.enclosure.link) || post.thumbnail;
+                        let imagesHTML = '';
+                        const enclosureImage = post.enclosure && post.enclosure.link;
+                        const thumbnailImage = post.thumbnail;
                         
-                        if (isValidImageURL(imageURL)) {
-                            img = `<img src="${imageURL}" alt="${post.title || 'Image'}" loading="lazy">`;
-                        }
+                        if (isValidImageURL(enclosureImage)) imagesHTML += `<img src="${enclosureImage}" alt="Image" loading="lazy">`;
+                        if (isValidImageURL(thumbnailImage)) imagesHTML += `<img src="${thumbnailImage}" alt="Image" loading="lazy">`;
+                        if (post.description) imagesHTML += extractAllImages(post.description);
                         
                         const title = post.title ? post.title.trim() : 'শিরোনাম নেই';
                         let description = post.description ? extractTextFromHTML(post.description).trim() : '';
-                        
-                        // বর্ণনা খুব দীর্ঘ হলে সংক্ষিপ্ত করা
-                        if (description.length > 200) {
-                            description = description.substring(0, 200) + '...';
-                        }
-                        
+                        if (description.length > 200) description = description.substring(0, 200) + '...';
                         const date = post.pubDate ? formatDate(post.pubDate) : '';
                         
                         html += `
                             <div class="post">
-                                ${img}
+                                ${imagesHTML}
                                 <div class="post-content">
                                     <div class="post-title">${title}</div>
                                     <div class="post-description">${description}</div>
                                 </div>
-                                ${date ? `<div class="post-meta">
-                                    <span>প্রকাশিত: ${date}</span>
-                                    <span>সূত্র: RSS ফিড</span>
-                                </div>` : ''}
+                                ${date ? `<div class="post-date">প্রকাশিত: ${date}</div>` : ''}
                             </div>
                         `;
                     });
                     feed.innerHTML = html;
                 } else {
-                    feed.innerHTML = `
-                        <div class="empty-state">
-                            <p>কোনো পোস্ট পাওয়া যায়নি।</p>
-                        </div>
-                    `;
+                    feed.innerHTML = `<div class="empty-state"><p>কোনো পোস্ট পাওয়া যায়নি।</p></div>`;
                 }
             })
             .catch(err => {
@@ -274,8 +269,7 @@
                 feed.innerHTML = `
                     <div class="error">
                         <p>ফিড লোড করতে সমস্যা হয়েছে।</p>
-                        <p><small>${err.message}</small></p>
-                        <button onclick="loadFeed()" style="margin-top: 15px; padding: 8px 16px; background: #2c5aa0; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        <button onclick="loadFeed()" style="margin-top:15px; padding:8px 16px; background:#2c5aa0; color:white; border:none; border-radius:5px; cursor:pointer;">
                             আবার চেষ্টা করুন
                         </button>
                     </div>
@@ -283,7 +277,6 @@
             });
         }
         
-        // পেজ লোড হলে ফিড লোড করতে
         document.addEventListener('DOMContentLoaded', loadFeed);
     </script>
 </body>
