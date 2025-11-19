@@ -1,389 +1,60 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আমার RSS ফিড</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Hind Siliguri', sans-serif;
-        }
-
-        :root {
-            --primary: #2c5aa0;
-            --secondary: #4a7bc8;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --border: #e2e8f0;
-            --shadow: rgba(0, 0, 0, 0.08);
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .logo i {
-            color: var(--primary);
-            font-size: 32px;
-        }
-
-        .logo h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .tagline {
-            color: var(--text-secondary);
-            font-size: 16px;
-            margin-top: 5px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
-
-        .loading i {
-            font-size: 40px;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-
-        .post {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px var(--shadow);
-            margin-bottom: 25px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--border);
-        }
-
-        .post:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-        }
-
-        .post-content {
-            padding: 25px;
-        }
-
-        .post-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            line-height: 1.4;
-            color: var(--primary);
-        }
-
-        .post-description {
-            color: var(--text-primary);
-            margin-bottom: 20px;
-            line-height: 1.7;
-            font-size: 16px;
-        }
-
-        .post-image {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: block;
-            max-height: 500px;
-            object-fit: contain;
-            background-color: #f5f5f5;
-        }
-
-        .post-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            background-color: #f8fafc;
-            border-top: 1px solid var(--border);
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .post-date {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .post-source {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .error {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 4px 12px var(--shadow);
-            margin-bottom: 20px;
-            border: 1px solid #fed7d7;
-        }
-
-        .error i {
-            font-size: 48px;
-            color: #e53e3e;
-            margin-bottom: 15px;
-        }
-
-        .error h3 {
-            color: #c53030;
-            margin-bottom: 10px;
-        }
-
-        .refresh-btn {
-            margin-top: 20px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .refresh-btn:hover {
-            background-color: var(--secondary);
-            transform: translateY(-2px);
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 40px;
-            border-top: 1px solid var(--border);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 64px;
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .logo h1 {
-                font-size: 24px;
-            }
-            
-            .post-title {
-                font-size: 20px;
-            }
-            
-            .post-content {
-                padding: 20px;
-            }
-            
-            .post-meta {
-                flex-direction: column;
-                gap: 10px;
-                align-items: flex-start;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .post-title {
-                font-size: 18px;
-            }
-            
-            .post-description {
-                font-size: 15px;
-            }
-            
-            .post-image {
-                max-height: 300px;
-            }
-        }
-
-        /* Animation for posts */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .post {
-            animation: fadeIn 0.5s ease forwards;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>কাস্টম ফিড</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; margin:0; padding:20px; }
+    .container { max-width: 700px; margin: auto; }
+    .post { background: #fff; border-radius:10px; box-shadow:0 3px 8px rgba(0,0,0,0.1); margin-bottom:20px; overflow:hidden; }
+    .post img { width:100%; height:auto; display:block; }
+    .post-title { font-size:18px; font-weight:600; padding:15px; }
+    .post-description { font-size:15px; padding:0 15px 15px 15px; color:#333; line-height:1.5; }
+    @media (max-width:768px) {
+        body { padding:10px; }
+        .post-title { font-size:16px; }
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fas fa-rss"></i>
-                <h1>আমার RSS ফিড</h1>
-            </div>
-            <div class="tagline">
-                সর্বশেষ আপডেটগুলি এক জায়গায়
-            </div>
-        </header>
+<div class="container" id="feed">
+    <p style="text-align:center; color:#777;">লোড হচ্ছে...</p>
+</div>
 
-        <main id="feed">
-            <div class="loading">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>পোস্ট লোড হচ্ছে...</p>
-            </div>
-        </main>
+<script>
+const RSS_URL = "https://rss.app/feeds/xz4k6G8x8RLb3XZT.xml";
 
-        <footer>
-            <p>© ২০২৩ আমার RSS ফিড | সকল অধিকার সংরক্ষিত</p>
-        </footer>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const feedContainer = document.getElementById('feed');
-            
-            // RSS feed URL
-            const RSS_URL = "https://rss.app/feeds/xz4k6G8x8RLb3XZT.xml";
-            
-            // Load posts function
-            function loadPosts() {
-                feedContainer.innerHTML = `
-                    <div class="loading">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>পোস্ট লোড হচ্ছে...</p>
-                    </div>
-                `;
-                
-                // সরাসরি rss2json API কল করছি
-                fetch(`https://api.rss2json.com/v1/api.json?rss_url=${RSS_URL}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('নেটওয়ার্ক রেসপন্স ঠিক নেই');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.status === 'ok' && data.items && data.items.length > 0) {
-                            displayPosts(data.items);
-                        } else {
-                            showError('কোনো পোস্ট পাওয়া যায়নি বা RSS ফিড সঠিক নয়');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching RSS feed:', error);
-                        showError('ফিড লোড করতে সমস্যা হচ্ছে: ' + error.message);
-                    });
+fetch(`https://api.rss2json.com/v1/api.json?rss_url=${RSS_URL}`)
+.then(res => res.json())
+.then(data => {
+    const feed = document.getElementById('feed');
+    if(data.status==='ok' && data.items.length>0){
+        let html = '';
+        data.items.forEach(post => {
+            let img = '';
+            if(post.enclosure && post.enclosure.link){
+                img = `<img src="${post.enclosure.link}" alt="Image">`;
+            } else if(post.thumbnail){
+                img = `<img src="${post.thumbnail}" alt="Image">`;
             }
-            
-            // Display posts function
-            function displayPosts(posts) {
-                let html = '';
-                
-                posts.forEach((post, index) => {
-                    // Extract image from content if available
-                    let imageHtml = '';
-                    if (post.enclosure && post.enclosure.link) {
-                        imageHtml = `<img src="${post.enclosure.link}" class="post-image" alt="Post image" loading="lazy">`;
-                    } else if (post.thumbnail) {
-                        imageHtml = `<img src="${post.thumbnail}" class="post-image" alt="Post image" loading="lazy">`;
-                    }
-                    
-                    // Format date
-                    const postDate = new Date(post.pubDate);
-                    const formattedDate = postDate.toLocaleDateString('bn-BD', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    
-                    // Create post HTML
-                    html += `
-                        <div class="post" style="animation-delay: ${index * 0.1}s">
-                            <div class="post-content">
-                                <h2 class="post-title">${post.title || 'শিরোনাম নেই'}</h2>
-                                <div class="post-description">${post.description || 'বর্ণনা নেই'}</div>
-                                ${imageHtml}
-                            </div>
-                            <div class="post-meta">
-                                <div class="post-date">
-                                    <i class="far fa-clock"></i> ${formattedDate}
-                                </div>
-                                <div class="post-source">
-                                    <i class="fas fa-rss"></i> RSS ফিড
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                feedContainer.innerHTML = html;
-            }
-            
-            // Show error function
-            function showError(message) {
-                feedContainer.innerHTML = `
-                    <div class="error">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3>সমস্যা হয়েছে</h3>
-                        <p>${message}</p>
-                        <button class="refresh-btn" id="retryBtn">
-                            <i class="fas fa-redo"></i> আবার চেষ্টা করুন
-                        </button>
-                    </div>
-                `;
-                
-                document.getElementById('retryBtn').addEventListener('click', loadPosts);
-            }
-            
-            // Initial load
-            loadPosts();
+            html += `
+                <div class="post">
+                    ${img}
+                    <div class="post-title">${post.title || ''}</div>
+                    <div class="post-description">${post.description || ''}</div>
+                </div>
+            `;
         });
-    </script>
+        feed.innerHTML = html;
+    } else {
+        feed.innerHTML = '<p style="text-align:center; color:#777;">কোনো পোস্ট পাওয়া যায়নি।</p>';
+    }
+})
+.catch(err => {
+    document.getElementById('feed').innerHTML = '<p style="text-align:center; color:red;">ফিড লোড করতে সমস্যা হয়েছে।</p>';
+    console.error(err);
+});
+</script>
 </body>
 </html>
